@@ -22,9 +22,7 @@ namespace SpaceShooterCSharp
                 Random y = new Random();
                 for (int i = 0; i < 50; i++)
                 {
-                    BackgroundStar star = new(x.Next(0, Constants.windowWidth + 1), y.Next(0, Constants.windowHeight + 1));
-                    star.Spawn();
-                    BackgroundStars.Add(star);
+                    BackgroundStars.Add(new BackgroundStar().Spawn());
                 }
             }
 

@@ -17,40 +17,54 @@ namespace SpaceShooterCSharp
         private int starPosX;
         private int starPosY;
         private int starSize;
-        private Rectangle star;
+        private Rectangle? star;
 
-        public BackgroundStar(int posX, int posY)
-        {
-            Random random = new Random();
-            starSize = random.Next(3, 9);
-            this.starPosX = posX;
-            this.starPosY = posY;
-        }
-
+        public BackgroundStar()
+        { }
 
         public BackgroundStar Spawn()
         {
-            Rectangle star = new Rectangle
-            {
-                Height = starSize,
-                Width = starSize,
-                Fill = Brushes.DarkSlateGray
-            };
-            this.star = star;
-            Canvas.SetLeft(star, starPosX);
-            Canvas.SetTop(star, starPosY);
-            MainWindow.game.gameCanvas?.Children.Add(star);
+            PositionStar(false);
             return this;
         }
 
         public void Update()
         {
-            if (Canvas.GetLeft(this.star) - 2 <= 0)
+            if (Canvas.GetLeft(this.star) - 2 <= 5)
             {
+                MainWindow.game.gameCanvas.Children.Remove(star);
+                PositionStar(true);
             }
             else
 
                 Canvas.SetLeft(this.star, Canvas.GetLeft(this.star) - 2);
+        }
+        public void PositionStar(bool starAtCanvasEnd)
+        {
+            RandomizeStats(starAtCanvasEnd);
+            star = new Rectangle
+            {
+                Height = starSize,
+                Width = starSize,
+                Fill = Brushes.DarkSlateGray
+            };
+            Canvas.SetLeft(star, starPosX);
+            Canvas.SetTop(star, starPosY);
+            MainWindow.game.gameCanvas?.Children.Add(star);
+        }
+
+        public void RandomizeStats(bool starAtCanvasEnd)
+        {
+            Random random = new Random();
+            starSize = random.Next(3, 9);
+
+            if (!starAtCanvasEnd)
+                starPosX = random.Next(0, Constants.windowWidth + 1);
+            else if (starAtCanvasEnd)
+                starPosX = Constants.windowWidth;
+
+            starPosY = random.Next(0, Constants.windowHeight + 1);
+
         }
 
     }
