@@ -36,7 +36,7 @@ namespace SpaceShooterCSharp
             };
 
             Canvas.SetLeft(enemy, Constants.WindowWidth - enemy.Width);
-            Canvas.SetTop(enemy, new Random().Next(0, Constants.WindowHeight + 1));
+            Canvas.SetTop(enemy, new Random().Next(20, Constants.WindowHeight + -19));
             MainWindow.game.GameCanvas?.Children.Add(enemy);
         }
 
