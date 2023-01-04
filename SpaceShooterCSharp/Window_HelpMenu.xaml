@@ -1,0 +1,51 @@
+﻿<Window x:Class="SpaceShooterCSharp.Window_HelpMenu"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        Title="StartMenu" Height="400" Width="550"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        FontSize="30"
+        AllowsTransparency="True"
+        Background="Transparent"
+        Loaded="Window_Loaded"
+        Closed="Window_Closed"
+        >
+    <Border BorderBrush="Green"
+            BorderThickness="5"
+            CornerRadius="10"
+            Margin="1" >
+
+        <Grid Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="280"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Name="helpText" TextAlignment="Center" FontFamily="Symtext" Background="Black" TextWrapping="Wrap" Foreground="DarkGray">
+          
+            <TextBlock Margin=" 0,10,0,0" TextWrapping="Wrap">USE <TextBlock Foreground="DarkGreen"><Bold>ARROW KEYS</Bold></TextBlock> OR <TextBlock Foreground="DarkGreen"><Bold>WASD</Bold></TextBlock> TO MOVE </TextBlock><LineBreak/>
+            <TextBlock Margin="0,-8,0,-8">-</TextBlock><LineBreak/>
+                
+             <TextBlock >PRESS <TextBlock Foreground="DarkGreen"><Bold>SPACE</Bold></TextBlock> TO SHOOT </TextBlock><LineBreak/>
+             <TextBlock Margin="0,-8,0,-8">-</TextBlock><LineBreak/>
+                          
+                                <TextBlock>DON'T LOOSE ALL YOUR HP</TextBlock><LineBreak/>
+            
+                
+            </TextBlock>
+            <Grid Grid.Row="1">
+                               
+                <Button 
+                Click="Button_StartGame"
+                Content="START GAME" FontFamily="Symtext" Background="DarkGreen" FontWeight="Bold"/>
+                
+                
+            </Grid>
+
+        </Grid>
+
+    </Border>
+</Window>

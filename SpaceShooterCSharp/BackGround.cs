@@ -12,20 +12,12 @@ namespace SpaceShooterCSharp
     {
         private List<BackgroundStar> BackgroundStars = new List<BackgroundStar>();
 
-        public Background(bool gameStarted)
+        public Background()
         {
-
-
-            if (!gameStarted)
+            for (int i = 0; i < 50; i++)
             {
-                Random x = new Random();
-                Random y = new Random();
-                for (int i = 0; i < 50; i++)
-                {
-                    BackgroundStars.Add(new BackgroundStar().Spawn());
-                }
+                BackgroundStars.Add(new BackgroundStar().Spawn());
             }
-
 
         }
 

@@ -9,7 +9,7 @@
         Title="SpaceShooter" SizeToContent="WidthAndHeight" KeyDown="OnKeyDown" KeyUp="OnKeyUp" ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen">
     <Canvas Name="gameCanvas" Focusable="true" Width="1000" Height="500" Background="Black">
-        
+
     </Canvas>
 
 </Window>

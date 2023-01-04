@@ -30,14 +30,13 @@ namespace SpaceShooterCSharp
 
         public void Update()
         {
-            if (Canvas.GetLeft(this.star) - 2 <= 5)
+            if (Canvas.GetLeft(star) - 2 <= 5)
             {
-                MainWindow.game.gameCanvas.Children.Remove(star);
+                MainWindow.game.GameCanvas?.Children.Remove(star);
                 PositionStar(true);
             }
             else
-
-                Canvas.SetLeft(this.star, Canvas.GetLeft(this.star) - 2);
+                Canvas.SetLeft(star, Canvas.GetLeft(star) - MainWindow.game.GameSpeed);
         }
         public void PositionStar(bool starAtCanvasEnd)
         {
@@ -50,7 +49,7 @@ namespace SpaceShooterCSharp
             };
             Canvas.SetLeft(star, starPosX);
             Canvas.SetTop(star, starPosY);
-            MainWindow.game.gameCanvas?.Children.Add(star);
+            MainWindow.game.GameCanvas?.Children.Add(star);
         }
 
         public void RandomizeStats(bool starAtCanvasEnd)
@@ -59,11 +58,11 @@ namespace SpaceShooterCSharp
             starSize = random.Next(3, 9);
 
             if (!starAtCanvasEnd)
-                starPosX = random.Next(0, Constants.windowWidth + 1);
-            else if (starAtCanvasEnd)
-                starPosX = Constants.windowWidth;
+                starPosX = random.Next(0, Constants.WindowWidth + 1);
+            else
+                starPosX = Constants.WindowWidth;
 
-            starPosY = random.Next(0, Constants.windowHeight + 1);
+            starPosY = random.Next(0, Constants.WindowHeight + 1);
 
         }
 

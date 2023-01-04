@@ -11,8 +11,8 @@ namespace SpaceShooterCSharp
     {
         public const int playerStartPosX = 100;
         public const int playerStartPosY = 250;
-        public const int windowHeight = 500;
-        public const int windowWidth = 1000;
+        public const int WindowHeight = 500;
+        public const int WindowWidth = 1000;
 
     }
 }
