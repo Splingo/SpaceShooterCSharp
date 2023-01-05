@@ -14,15 +14,17 @@ namespace SpaceShooterCSharp
     {
         private int bulletSpeed;
 
-        private Rectangle? bullet;
+        private Rectangle bullet;
+
+        private string? tag;
 
         public Bullet(int direction, Rectangle origin)
         {
             bulletSpeed = direction * 5;
-            spawnBullet(origin);
+            bullet = spawnBullet(origin);
         }
 
-        private void spawnBullet(Rectangle origin)
+        private Rectangle spawnBullet(Rectangle origin)
         {
             bullet = new Rectangle
             {
@@ -37,6 +39,7 @@ namespace SpaceShooterCSharp
                 Canvas.SetLeft(bullet, Canvas.GetLeft(origin) + origin.ActualWidth);
                 bullet.Fill = Brushes.Red;
                 bullet.Tag = "playerBullet";
+                tag = "playerBullet";
             }
             else
                 Canvas.SetLeft(bullet, Canvas.GetLeft(origin));
@@ -44,9 +47,11 @@ namespace SpaceShooterCSharp
 
             Canvas.SetTop(bullet, Canvas.GetTop(origin) + origin.ActualHeight / 2);
 
-            Panel.SetZIndex(bullet, 1);
+            Panel.SetZIndex(bullet, 2);
 
             MainWindow.game.GameCanvas?.Children.Add(bullet);
+
+            return bullet;
         }
 
         internal void Update()
@@ -68,12 +73,13 @@ namespace SpaceShooterCSharp
 
         public string? CheckBulletTag()
         {
-            return bullet?.Tag.ToString();
+            return tag;
         }
 
         public Rect GetBulletHitbox()
         {
-            return new Rect(Canvas.GetLeft(bullet), Canvas.GetTop(bullet), bullet.Width, bullet.Height); ;
+            return new Rect(Canvas.GetLeft(bullet), Canvas.GetTop(bullet), bullet.ActualWidth, bullet.Height);
+
         }
 
         public void deleteBullet()

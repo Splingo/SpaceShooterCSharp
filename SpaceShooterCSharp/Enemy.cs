@@ -14,34 +14,43 @@ namespace SpaceShooterCSharp
     {
         private int enemyXSpeed;
         private int enemyYSpeed;
+        private int shooterTimer;
 
-        private Rectangle? enemy;
+        private Rectangle enemy;
 
         public Enemy(int direction)
         {
-
+            shooterTimer = 0;
             enemyXSpeed = direction;
             enemyYSpeed = direction * new Random().Next(-1, 2);
-            spawnEnemy();
+            enemy = spawnEnemy();
         }
 
-        private void spawnEnemy()
+        private Rectangle spawnEnemy()
         {
             enemy = new Rectangle
             {
                 Tag = enemy,
-                Height = 8,
-                Width = 20,
+                Height = 20,
+                Width = 30,
                 Fill = Brushes.Lime
             };
 
             Canvas.SetLeft(enemy, Constants.WindowWidth - enemy.Width);
-            Canvas.SetTop(enemy, new Random().Next(20, Constants.WindowHeight + -19));
+            Canvas.SetTop(enemy, new Random().Next(20, Constants.WindowHeight - 19));
+            Panel.SetZIndex(enemy, 2);
             MainWindow.game.GameCanvas?.Children.Add(enemy);
+
+            return enemy;
         }
 
         public bool Update()
         {
+            shooterTimer++;
+            if (shooterTimer % 100 == 0)
+            {
+                MainWindow.game.Shoot(-1, enemy);
+            }
             if (CheckBorderCollision())
             {
                 MoveEnemy();
@@ -49,7 +58,6 @@ namespace SpaceShooterCSharp
             }
             else
                 return false;
-
         }
 
         private void MoveEnemy()

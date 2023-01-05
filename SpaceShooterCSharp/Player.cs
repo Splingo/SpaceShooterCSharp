@@ -17,18 +17,17 @@ namespace SpaceShooterCSharp
 {
     public class Player
     {
-        public int Health { get; set; }
+        public int Health { get; internal set; } = 3;
 
-        private double speed = 2.0;
+        private double speed;
 
         private bool goUp, goLeft, goRight, goDown;
         private Rectangle PlayerRectangle;
 
-        private Rect playerHitbox;
-
         public Player(Canvas gameCanvas)
         {
             PlayerRectangle = spawnPlayer(gameCanvas);
+
         }
 
         private Rectangle spawnPlayer(Canvas gameCanvas)
@@ -44,29 +43,25 @@ namespace SpaceShooterCSharp
             Canvas.SetLeft(player, Constants.playerStartPosX);
             Canvas.SetTop(player, Constants.playerStartPosY);
 
-            Panel.SetZIndex(player, 1);
-
             gameCanvas.Children.Add(player);
 
+            Panel.SetZIndex(player, 2);
+
             return player;
+
         }
 
         public void UpdatePlayer()
         {
             BorderCollisionCheck();
             UpdatePlayerPos();
-            UpdatePlayerHitbox();
         }
 
-        public Rect GetPlayerPos()
+        public Rect GetPlayerHitbox()
         {
-            return playerHitbox;
+            return new Rect(Canvas.GetLeft(PlayerRectangle), Canvas.GetTop(PlayerRectangle), PlayerRectangle.Width, PlayerRectangle.Height);
         }
 
-        private void UpdatePlayerHitbox()
-        {
-            playerHitbox = new Rect(Canvas.GetTop(PlayerRectangle), Canvas.GetLeft(PlayerRectangle), PlayerRectangle.Width, PlayerRectangle.Height);
-        }
 
         public void UpdatePlayerPos()
         {
@@ -93,7 +88,7 @@ namespace SpaceShooterCSharp
         private void CheckPlayerSpeed()
         {
             if ((goDown || goUp) && (goLeft || goRight))
-                speed = Math.Sqrt(2.0);
+                speed =  Math.Sqrt(2.0);
             else
                 speed = 2.0;
         }

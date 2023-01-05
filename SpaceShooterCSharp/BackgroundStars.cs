@@ -19,9 +19,6 @@ namespace SpaceShooterCSharp
         private int starSize;
         private Rectangle? star;
 
-        public BackgroundStar()
-        { }
-
         public BackgroundStar Spawn()
         {
             PositionStar(false);

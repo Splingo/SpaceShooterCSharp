@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Transactions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -17,28 +16,27 @@ using System.Windows.Shapes;
 namespace SpaceShooterCSharp
 {
     /// <summary>
-    /// Interaction logic for Window_HelpMenu.xaml
+    /// Interaction logic for Window_GameLostMenu.xaml
     /// </summary>
-    public partial class Window_HelpMenu : Window
+    public partial class Window_GameLostMenu : Window
     {
-        public Window_HelpMenu()
+        public Window_GameLostMenu()
         {
             InitializeComponent();
+            textBlock2.Inlines.Add($"YOUR SCORE: {MainWindow.game.ScoreAsInt}");
             Topmost = true;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Button_ExitGame(object sender, RoutedEventArgs e)
         {
-
+            Application.Current.Shutdown();
         }
 
-        private void Button_StartGame(object sender, RoutedEventArgs e)
+        private void Button_Restart(object sender, RoutedEventArgs e)
         {
-            MainWindow.game.StartGame(false);
+            MainWindow.game.StartGame(true);
             Close();
         }
-
-
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
 
@@ -49,6 +47,6 @@ namespace SpaceShooterCSharp
 
         }
 
-
     }
+
 }

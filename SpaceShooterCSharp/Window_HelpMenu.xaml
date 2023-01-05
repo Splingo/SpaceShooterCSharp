@@ -12,6 +12,7 @@
         Background="Transparent"
         Loaded="Window_Loaded"
         Closed="Window_Closed"
+        FontFamily="Symtext"
         >
     <Border BorderBrush="Green"
             BorderThickness="5"
@@ -24,15 +25,17 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <TextBlock Grid.Row="0" Name="helpText" TextAlignment="Center" FontFamily="Symtext" Background="Black" TextWrapping="Wrap" Foreground="DarkGray">
+            <TextBlock Grid.Row="0" Name="helpText" TextAlignment="Center"  Background="Black" TextWrapping="Wrap" Foreground="DarkGray">
           
             <TextBlock Margin=" 0,10,0,0" TextWrapping="Wrap">USE <TextBlock Foreground="DarkGreen"><Bold>ARROW KEYS</Bold></TextBlock> OR <TextBlock Foreground="DarkGreen"><Bold>WASD</Bold></TextBlock> TO MOVE </TextBlock><LineBreak/>
+            
             <TextBlock Margin="0,-8,0,-8">-</TextBlock><LineBreak/>
                 
              <TextBlock >PRESS <TextBlock Foreground="DarkGreen"><Bold>SPACE</Bold></TextBlock> TO SHOOT </TextBlock><LineBreak/>
+                
              <TextBlock Margin="0,-8,0,-8">-</TextBlock><LineBreak/>
-                          
-                                <TextBlock>DON'T LOOSE ALL YOUR HP</TextBlock><LineBreak/>
+             
+                <TextBlock>DON'T LOOSE ALL YOUR HP</TextBlock><LineBreak/>
             
                 
             </TextBlock>
@@ -40,7 +43,7 @@
                                
                 <Button 
                 Click="Button_StartGame"
-                Content="START GAME" FontFamily="Symtext" Background="DarkGreen" FontWeight="Bold"/>
+                Content="START GAME" Background="DarkGreen" FontWeight="Bold"/>
                 
                 
             </Grid>

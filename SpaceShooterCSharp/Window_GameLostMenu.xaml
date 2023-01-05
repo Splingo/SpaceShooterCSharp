@@ -1,0 +1,55 @@
+﻿<Window x:Class="SpaceShooterCSharp.Window_GameLostMenu"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        Title="GameLostMenu" Height="250" Width="300"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        FontSize="25"
+        
+        AllowsTransparency="True"
+        Background="Transparent"
+        Loaded="Window_Loaded"
+        Closed="Window_Closed"
+        FontFamily="Symtext"
+        >
+    <Border BorderBrush="Green"
+            BorderThickness="5"
+            CornerRadius="10"
+            Margin="1" >
+
+        <Grid Margin="10"   >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Name="textBlock1" Background="Black" TextAlignment="Center" FontWeight="Bold"  Foreground="DarkGray">
+                    
+            <Bold>YOU LOST!</Bold>
+                </TextBlock>
+                <TextBlock Grid.Row="1" Name="textBlock2" Background="Black" TextAlignment="Center" FontWeight="Bold" Foreground="DarkGreen" >
+                </TextBlock>
+            </Grid>
+
+            <Button Grid.Row="1" Background="Black"
+            Click="Button_Restart"
+            Content="RESTART GAME"   Foreground="DarkGray" />
+
+            <Button Grid.Row="2" Background="Black"
+            Click="Button_ExitGame"
+            Content="EXIT GAME"  Foreground="DarkGray"  FontWeight="Bold"/>
+
+        </Grid>
+
+    </Border>
+</Window>
