@@ -56,6 +56,7 @@ namespace SpaceShooterCSharp
 
         public void StartGame()
         {
+            soundEngine?.PlaySound(SoundEngine.ESounds.StartGame);
             gameStarted = true;
             gameTimer.Start();
             soundEngine?.PlaySound(SoundEngine.ESounds.BackgroundMusic);
