@@ -19,7 +19,7 @@ namespace SpaceShooterCSharp
         //public variables
         public int ScoreAsInt { get; set; }
         public int GameSpeed { get; internal set; }
-        public Player? player { get; internal set; }
+        public Player? Player { get; internal set; }
 
         public Canvas? GameCanvas;
 
@@ -48,7 +48,7 @@ namespace SpaceShooterCSharp
         {
             gameTimer = new();
             GameCanvas = gameCanvas;
-            player = new();
+            Player = new();
             background = new();
             soundEngine = new();
             scoreHealthDisplay = new();
@@ -67,11 +67,11 @@ namespace SpaceShooterCSharp
         {
             if (restartGame)
             {
-                player?.ResetPlayer();
+                Player?.ResetPlayer();
                 ResetGame();
             }
             if (GameCanvas != null)
-                player?.SetResetPlayerPos(GameCanvas);
+                Player?.SetResetPlayerPos(GameCanvas);
 
             gameStarted = true;
             soundEngine?.PlaySound(SoundEngine.ESounds.StartGame);
@@ -100,7 +100,7 @@ namespace SpaceShooterCSharp
             EnemySpawner();
 
             background?.UpdateBG();
-            player?.UpdatePlayer();
+            Player?.UpdatePlayer();
 
             BulletUpdateHelper();
             BulletRemover();
@@ -157,8 +157,8 @@ namespace SpaceShooterCSharp
         //calls PlayerDamaged method if true        
         private void CheckIfPlayerHitByBullet(Bullet bullet)
         {
-            if (player != null)
-                if (bullet.GetBulletHitbox().IntersectsWith(player.GetPlayerHitbox()))
+            if (Player != null)
+                if (bullet.GetBulletHitbox().IntersectsWith(Player.GetPlayerHitbox()))
                 {
                     PlayerDamaged();
                 }
@@ -180,12 +180,12 @@ namespace SpaceShooterCSharp
         //game lost Menu
         private void PlayerDamaged()
         {
-            if (player != null)
+            if (Player != null)
             {
-                player.Health--;
+                Player.Health--;
 
                 soundEngine?.PlaySound(SoundEngine.ESounds.PlayerDamaged);
-                if (player.Health == 0)
+                if (Player.Health == 0)
                 {
                     gameTimer?.Stop();
                     new Window_GameLostMenu().Show();
@@ -215,8 +215,8 @@ namespace SpaceShooterCSharp
         //calls PlayerDamaged method if true
         private void CheckIfPlayerHitByEnemy(Enemy enemy)
         {
-            if (player != null)
-                if (enemy.GetEnemyHitbox().IntersectsWith(player.GetPlayerHitbox()))
+            if (Player != null)
+                if (enemy.GetEnemyHitbox().IntersectsWith(Player.GetPlayerHitbox()))
                 {
                     PlayerDamaged();
                 }
@@ -229,7 +229,7 @@ namespace SpaceShooterCSharp
         {
             if (GameCanvas != null)
             {
-                player?.SetResetPlayerPos(GameCanvas);
+                Player?.SetResetPlayerPos(GameCanvas);
             }
             int temp = enemyList.Count;
             for (int i = 0; i < temp; i++)
@@ -289,12 +289,12 @@ namespace SpaceShooterCSharp
         public void OnKeyDown(object? sender, KeyEventArgs e)
         {
             if (gameStarted)
-                player?.OnKeyDown(sender, e);
+                Player?.OnKeyDown(sender, e);
         }
         public void OnKeyUp(object? sender, KeyEventArgs e)
         {
             if (gameStarted)
-                player?.OnKeyUp(sender, e);
+                Player?.OnKeyUp(sender, e);
         }
         #endregion
 

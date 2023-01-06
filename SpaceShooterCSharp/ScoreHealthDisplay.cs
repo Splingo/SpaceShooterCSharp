@@ -68,7 +68,7 @@ namespace SpaceShooterCSharp
         private void UpdateHealthDisplay()
         {
             string healthText = " HP: ";
-            for (int i = 0; i < MainWindow.game.player?.Health; i++)
+            for (int i = 0; i < MainWindow.game.Player?.Health; i++)
             {
                 healthText += Convert.ToChar(0x00002665);
             }
