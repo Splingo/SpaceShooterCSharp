@@ -19,12 +19,8 @@ namespace SpaceShooterCSharp
         private int starSize;
         private Rectangle? star;
 
-        public BackgroundStar Spawn()
-        {
-            PositionStar(false);
-            return this;
-        }
-
+        //Update method checks if a star reached the left side of Canvas and deletes it and calls PositionStar method to
+        //respawn it or moves it further left
         public void Update()
         {
             if (Canvas.GetLeft(star) - 2 <= 5)
@@ -33,9 +29,11 @@ namespace SpaceShooterCSharp
                 PositionStar(true);
             }
             else
-                Canvas.SetLeft(star, Canvas.GetLeft(star) - MainWindow.game.GameSpeed);
+                Canvas.SetLeft(star, Canvas.GetLeft(star) - 1);
         }
-        public void PositionStar(bool starAtCanvasEnd)
+
+        //PositionStar gets random stats from RandomizeStats method for size, x/y positions and spawns a star on the canvas
+        public BackgroundStar PositionStar(bool starAtCanvasEnd)
         {
             RandomizeStats(starAtCanvasEnd);
             star = new Rectangle
@@ -47,8 +45,12 @@ namespace SpaceShooterCSharp
             Canvas.SetLeft(star, starPosX);
             Canvas.SetTop(star, starPosY);
             MainWindow.game.GameCanvas?.Children.Add(star);
+            return this;
         }
 
+
+        //RandomizeStats randomizes star size and x/y positions during first spawning.
+        //x position is later set to WindowWidth to spawn them on the right side of Window and only size and Y-position is random
         public void RandomizeStats(bool starAtCanvasEnd)
         {
             Random random = new Random();

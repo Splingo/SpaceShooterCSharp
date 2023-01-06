@@ -9,14 +9,23 @@ using System.Reflection;
 using System.Windows.Automation;
 using System.Media;
 using System.Windows.Shapes;
+using System.Linq;
 
 namespace SpaceShooterCSharp
 {
     public class GameEngine
     {
+        #region Variables
+        //public variables
         public int ScoreAsInt { get; set; }
+        public int GameSpeed { get; internal set; }
+        public Player? player { get; internal set; }
 
+        public Canvas? GameCanvas;
+
+        //private variables
         private bool gameStarted;
+        private bool playerDamaged;
 
         private List<Enemy> enemyList = new List<Enemy>();
         private List<Enemy> enemiesToRemove = new List<Enemy>();
@@ -30,81 +39,97 @@ namespace SpaceShooterCSharp
 
         private SoundEngine? soundEngine;
 
-        public Player? player { get; internal set; }
-
-        public Canvas? GameCanvas;
-
         private ScoreHealthDisplay? scoreHealthDisplay;
+        #endregion
 
-        public int GameSpeed { get; internal set; }
-
+        #region SetResetGame
+        //initalize game variables and show HelpMenu
         public void InitializeGame(Canvas gameCanvas)
         {
-            ScoreAsInt = 0;
             gameTimer = new();
             GameCanvas = gameCanvas;
-            player = new(gameCanvas);
+            player = new();
             background = new();
             soundEngine = new();
             scoreHealthDisplay = new();
+
 
             gameTimer.Interval = TimeSpan.FromMilliseconds(5);
             gameTimer.Tick += new EventHandler(GameTimerEvent);
 
-            GameSpeed = 1;
-
-            Window_HelpMenu help = new();
-            help.Show();
-
+            new Window_HelpMenu().Show();
         }
 
+
+        //when game is restarted, resets player and gamestate
+        // start timer and plays background sound otherwise
         public void StartGame(bool restartGame)
         {
             if (restartGame)
             {
+                player?.ResetPlayer();
                 ResetGame();
             }
+            if (GameCanvas != null)
+                player?.SetResetPlayerPos(GameCanvas);
+
             gameStarted = true;
             soundEngine?.PlaySound(SoundEngine.ESounds.StartGame);
             gameTimer?.Start();
             soundEngine?.PlaySound(SoundEngine.ESounds.BackgroundMusic);
-            scoreHealthDisplay?.GenerateDisplays();
+            ScoreAsInt = 0;
         }
 
+        //method clears background, resets and re-adds various objects creates to restart the game
+        //method clears Enemy and Bullet objects from lists
         public void ResetGame()
         {
             GameCanvas?.Children.Clear();
-            ScoreAsInt = 0;
-            if (GameCanvas != null)
-                player = new Player(GameCanvas);
             background = new();
             soundEngine?.StopSound();
-            soundEngine = new();
-            scoreHealthDisplay = new();
+            scoreHealthDisplay?.AddDisplaysToCanvas();
             enemyList.Clear();
             bulletList.Clear();
         }
 
+        #endregion
 
-        public void PauseGame()
-        {
-            gameTimer?.Stop();
-        }
-
-        public void UnpauseGame()
-        {
-            gameTimer?.Start();
-        }
-
-
+        //Events that are called each tick when Timer is running
         private void GameTimerEvent(object? sender, EventArgs e)
         {
-
             EnemySpawner();
 
             background?.UpdateBG();
             player?.UpdatePlayer();
 
+            BulletUpdateHelper();
+            BulletRemover();
+
+            EnemyUpdateHelper();
+            EnemyRemover();
+
+            scoreHealthDisplay?.UpdateDisplays();
+
+            if (playerDamaged)
+            {
+                PlayerDamagedResetCanvas();
+                playerDamaged = false;
+            }
+        }
+
+        //simple method to spawn more enemies
+        //enemy count is current score / 10, min 1.
+        //enemy speed is determined by same calculation -> more points = more and faster enemies (only X speed is changed)
+        private void EnemySpawner()
+        {
+            if (enemyList.Count <= ScoreAsInt / 10)
+                enemyList.Add(new Enemy(Math.Min(ScoreAsInt / 10 * -1, -1)));
+        }
+
+        //helpermethod that calls the Update method for each bullet for movement
+        // and checks the bullet origin and calls specific collision check methods
+        private void BulletUpdateHelper()
+        {
             foreach (Bullet bullet in bulletList)
             {
                 bullet.Update();
@@ -112,20 +137,12 @@ namespace SpaceShooterCSharp
                 if (bullet.CheckBulletTag() == "playerBullet")
                     CheckIfEnemyHit(bullet);
                 else
-                    CheckIfPlayerHit(bullet);
-
+                    CheckIfPlayerHitByBullet(bullet);
             }
-            foreach (Enemy enemy in enemyList)
-            {
-                if (!enemy.Update())
-                { enemiesToRemove.Add(enemy); }
-            }
-            EnemyRemover();
-            BulletRemover();
-            scoreHealthDisplay?.UpdateDisplays();
-
         }
 
+        //methods gets hitboxes from enemy and bullet and checks if they intersect
+        //calls EnemyKilled method if true        
         private void CheckIfEnemyHit(Bullet bullet)
         {
             foreach (Enemy enemy in enemyList)
@@ -136,15 +153,19 @@ namespace SpaceShooterCSharp
                 }
             }
         }
-        private void CheckIfPlayerHit(Bullet bullet)
+        //methods gets hitboxes from player and bullet and checks if they intersect
+        //calls PlayerDamaged method if true        
+        private void CheckIfPlayerHitByBullet(Bullet bullet)
         {
             if (player != null)
                 if (bullet.GetBulletHitbox().IntersectsWith(player.GetPlayerHitbox()))
                 {
-                    PlayerDamaged(bullet);
+                    PlayerDamaged();
                 }
-
         }
+
+        //method increases score, plays killsound, removes bullet and enemy from canvas and marks objects 
+        //for later removal
         private void EnemyKilled(Bullet bullet, Enemy enemy)
         {
             ScoreAsInt++;
@@ -154,47 +175,79 @@ namespace SpaceShooterCSharp
             enemiesToRemove.Add(enemy);
             bulletsToRemove.Add(bullet);
         }
-        private void PlayerDamaged(Bullet bullet)
+
+        //method decreased player HP, plays sound, checks if Health left and sets playerDamaged flag or stops game and shows 
+        //game lost Menu
+        private void PlayerDamaged()
         {
             if (player != null)
             {
                 player.Health--;
 
                 soundEngine?.PlaySound(SoundEngine.ESounds.PlayerDamaged);
-                bullet.deleteBullet();
-                bulletsToRemove.Add(bullet);
                 if (player.Health == 0)
                 {
                     gameTimer?.Stop();
                     new Window_GameLostMenu().Show();
                 }
+                else
+                {
+                    playerDamaged = true;
+                }
             }
         }
 
-        private void EnemyRemover()
+        //helpermethod that calls the Update method for each enemy for movement
+        //marks enemy to remove if enemy is at left border
+        //calls CheckIfPlayerHitByEnemy method for enemy-player collision detection
+        private void EnemyUpdateHelper()
         {
-            foreach (Enemy enemy in enemiesToRemove)
+            foreach (Enemy enemy in enemyList)
             {
-                enemyList.Remove(enemy);
+                if (!enemy.Update())
+                    enemiesToRemove.Add(enemy);
+                else
+                    CheckIfPlayerHitByEnemy(enemy);
             }
-            enemiesToRemove.Clear();
         }
 
-        private void BulletRemover()
+        //methods gets hitboxes from player and enemy and checks if they intersect
+        //calls PlayerDamaged method if true
+        private void CheckIfPlayerHitByEnemy(Enemy enemy)
         {
-            foreach (Bullet bullet in bulletsToRemove)
+            if (player != null)
+                if (enemy.GetEnemyHitbox().IntersectsWith(player.GetPlayerHitbox()))
+                {
+                    PlayerDamaged();
+                }
+        }
+
+        //method is called if player was damaged
+        //resets player position and deletes all enemy and bullet visuals from canvas
+        //enemy and bulletlist are cleared so that garbage collector deletes remaining objects
+        private void PlayerDamagedResetCanvas()
+        {
+            if (GameCanvas != null)
             {
-                bulletList.Remove(bullet);
+                player?.SetResetPlayerPos(GameCanvas);
             }
-            bulletsToRemove.Clear();
+            int temp = enemyList.Count;
+            for (int i = 0; i < temp; i++)
+            {
+                enemyList[i].deleteEnemy();
+            }
+            temp = bulletList.Count;
+            for (int i = 0; i < temp; i++)
+            {
+                bulletList[i].deleteBullet();
+            }
+            enemyList.Clear();
+            bulletList.Clear();
         }
 
-        private void EnemySpawner()
-        {
-            if (enemyList.Count <= ScoreAsInt / 10)
-                enemyList.Add(new Enemy(ScoreAsInt / 10 - 1));
-        }
-
+        //shooting method used for player and enemies
+        //direction can be used to differentiate between enemy and player
+        //bullets are added to a list for easier tracking and managing
         internal void Shoot(int direction, Rectangle origin)
         {
             bulletList?.Add(new Bullet(direction, origin));
@@ -204,6 +257,35 @@ namespace SpaceShooterCSharp
                 soundEngine?.PlaySound(SoundEngine.ESounds.EnemyShot);
         }
 
+        #region RemoverHelpers
+        //remover helper. visuals are deleted and objects are removed from list.
+        //garbage collector removes remaining objects
+        private void EnemyRemover()
+        {
+            foreach (Enemy enemy in enemiesToRemove)
+            {
+                enemy.deleteEnemy();
+                enemyList.Remove(enemy);
+            }
+            enemiesToRemove.Clear();
+        }
+
+        //remover helper. visuals are deleted and objects are removed from list.
+        //garbage collector removes remaining objects
+        private void BulletRemover()
+        {
+            foreach (Bullet bullet in bulletsToRemove)
+            {
+                bullet.deleteBullet();
+                bulletList.Remove(bullet);
+            }
+            bulletsToRemove.Clear();
+        }
+
+        #endregion
+
+        #region KeyEvents
+        //Key Events are handed over to player if game is started. otherwise nothing happens
         public void OnKeyDown(object? sender, KeyEventArgs e)
         {
             if (gameStarted)
@@ -214,7 +296,21 @@ namespace SpaceShooterCSharp
             if (gameStarted)
                 player?.OnKeyUp(sender, e);
         }
+        #endregion
 
+        #region unused
+
+        //methods to pause and unpause the game -> eg while displaying Menu
+        public void PauseGame()
+        {
+            gameTimer?.Stop();
+        }
+
+        public void UnpauseGame()
+        {
+            gameTimer?.Start();
+        }
+        #endregion
     }
 }
 

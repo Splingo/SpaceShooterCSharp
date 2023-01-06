@@ -8,6 +8,7 @@ using System.Windows.Media;
 
 namespace SpaceShooterCSharp
 {
+    //Background class generates, keeps track off and manages background items
     internal class Background
     {
         private List<BackgroundStar> BackgroundStars = new List<BackgroundStar>();
@@ -16,7 +17,7 @@ namespace SpaceShooterCSharp
         {
             for (int i = 0; i < 50; i++)
             {
-                BackgroundStars.Add(new BackgroundStar().Spawn());
+                BackgroundStars.Add(new BackgroundStar().PositionStar(false));
             }
 
         }

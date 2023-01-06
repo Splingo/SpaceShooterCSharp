@@ -12,20 +12,22 @@ namespace SpaceShooterCSharp
 {
     internal class Enemy
     {
-        private int enemyXSpeed;
+        private double enemyXSpeed;
         private int enemyYSpeed;
         private int shooterTimer;
-
         private Rectangle enemy;
 
+        //Constructor for enemie gets random number from -1,0,1 and sets initial Y Speed to that value.
+        //this way each enemy moves randomly up/down or not in Y direction during spawn
         public Enemy(int direction)
         {
             shooterTimer = 0;
-            enemyXSpeed = direction;
+            enemyXSpeed = direction * 1.5;
             enemyYSpeed = direction * new Random().Next(-1, 2);
             enemy = spawnEnemy();
         }
 
+        //creates enemy rectangle and positions it randomly on the right side
         private Rectangle spawnEnemy()
         {
             enemy = new Rectangle
@@ -44,6 +46,10 @@ namespace SpaceShooterCSharp
             return enemy;
         }
 
+        //method is called each tick in GameEngine, checks if enemy shoots, checks if Enemy is at any border and moves it otherwise
+        //bool is returned to let GameEngine know if Enemy is at left border to delete
+        //shooting occurs every 100 Ticks after spawn, but as enemies are (mostly) spawned at random times
+        //enemy shooting pattern is mostly random
         public bool Update()
         {
             shooterTimer++;
@@ -62,10 +68,11 @@ namespace SpaceShooterCSharp
 
         private void MoveEnemy()
         {
-            Canvas.SetLeft(enemy, Canvas.GetLeft(enemy) + enemyXSpeed * 1.5);
+            Canvas.SetLeft(enemy, Canvas.GetLeft(enemy) + enemyXSpeed);
             Canvas.SetTop(enemy, Canvas.GetTop(enemy) + enemyYSpeed);
         }
 
+        //method updates Y Speed if top or bottom border are reached and removes Enemy if left border is reached
         private bool CheckBorderCollision()
         {
             if (Canvas.GetLeft(enemy) - enemyXSpeed <= 5)
@@ -78,9 +85,9 @@ namespace SpaceShooterCSharp
             if (Canvas.GetTop(enemy) + enemyYSpeed + enemy?.Height > Constants.WindowHeight - 5)
                 enemyYSpeed *= -1;
             return true;
-
         }
 
+        //get hitbox for collision checks
         public Rect GetEnemyHitbox()
         {
             return new Rect(Canvas.GetLeft(enemy), Canvas.GetTop(enemy), enemy.Width, enemy.Height);

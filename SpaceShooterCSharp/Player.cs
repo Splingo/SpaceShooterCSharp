@@ -17,20 +17,18 @@ namespace SpaceShooterCSharp
 {
     public class Player
     {
-        public int Health { get; internal set; } = 3;
+        public int Health { get; internal set; }
 
         private double speed;
-
         private bool goUp, goLeft, goRight, goDown;
         private Rectangle PlayerRectangle;
 
-        public Player(Canvas gameCanvas)
+        public Player()
         {
-            PlayerRectangle = spawnPlayer(gameCanvas);
-
+            PlayerRectangle = spawnPlayer();
         }
 
-        private Rectangle spawnPlayer(Canvas gameCanvas)
+        private Rectangle spawnPlayer()
         {
             Rectangle player = new Rectangle
             {
@@ -40,10 +38,7 @@ namespace SpaceShooterCSharp
                 Fill = Brushes.Aqua
             };
 
-            Canvas.SetLeft(player, Constants.playerStartPosX);
-            Canvas.SetTop(player, Constants.playerStartPosY);
-
-            gameCanvas.Children.Add(player);
+            ResetPlayer();
 
             Panel.SetZIndex(player, 2);
 
@@ -51,48 +46,34 @@ namespace SpaceShooterCSharp
 
         }
 
+        public void SetResetPlayerPos(Canvas gameCanvas)
+        {
+            Canvas.SetLeft(PlayerRectangle, Constants.playerStartPosX);
+            Canvas.SetTop(PlayerRectangle, Constants.playerStartPosY);
+            if (!gameCanvas.Children.Contains(PlayerRectangle))
+                gameCanvas.Children.Add(PlayerRectangle);
+
+        }
+
+        //method resets player hp and stops movement if game is restarted
+        public void ResetPlayer()
+        {
+            goUp = false;
+            goLeft = false;
+            goRight = false;
+            goDown = false;
+            Health = 3;
+        }
+
+        //method is called each tick from GameEngine
         public void UpdatePlayer()
         {
             BorderCollisionCheck();
             UpdatePlayerPos();
         }
 
-        public Rect GetPlayerHitbox()
-        {
-            return new Rect(Canvas.GetLeft(PlayerRectangle), Canvas.GetTop(PlayerRectangle), PlayerRectangle.Width, PlayerRectangle.Height);
-        }
 
-
-        public void UpdatePlayerPos()
-        {
-            CheckPlayerSpeed();
-
-            if (goUp)
-            {
-                Canvas.SetTop(PlayerRectangle, Canvas.GetTop(PlayerRectangle) - speed);
-            }
-            if (goDown)
-            {
-                Canvas.SetTop(PlayerRectangle, Canvas.GetTop(PlayerRectangle) + speed);
-            }
-            if (goLeft)
-            {
-                Canvas.SetLeft(PlayerRectangle, Canvas.GetLeft(PlayerRectangle) - speed);
-            }
-            if (goRight)
-            {
-                Canvas.SetLeft(PlayerRectangle, Canvas.GetLeft(PlayerRectangle) + speed);
-            }
-        }
-
-        private void CheckPlayerSpeed()
-        {
-            if ((goDown || goUp) && (goLeft || goRight))
-                speed =  Math.Sqrt(2.0);
-            else
-                speed = 2.0;
-        }
-
+        //method checks if any border is reached and locks player position player 5px away from it
         private void BorderCollisionCheck()
         {
             if (Canvas.GetTop(PlayerRectangle) - speed < 5)
@@ -117,6 +98,47 @@ namespace SpaceShooterCSharp
             }
         }
 
+        //method checks player speed and moves player according to set movement directions
+        public void UpdatePlayerPos()
+        {
+            CheckPlayerSpeed();
+
+            if (goUp)
+            {
+                Canvas.SetTop(PlayerRectangle, Canvas.GetTop(PlayerRectangle) - speed);
+            }
+            if (goDown)
+            {
+                Canvas.SetTop(PlayerRectangle, Canvas.GetTop(PlayerRectangle) + speed);
+            }
+            if (goLeft)
+            {
+                Canvas.SetLeft(PlayerRectangle, Canvas.GetLeft(PlayerRectangle) - speed);
+            }
+            if (goRight)
+            {
+                Canvas.SetLeft(PlayerRectangle, Canvas.GetLeft(PlayerRectangle) + speed);
+            }
+        }
+
+        //adjusts player speed if moving diagonally
+        private void CheckPlayerSpeed()
+        {
+            if ((goDown || goUp) && (goLeft || goRight))
+                speed = Math.Sqrt(2.0);
+            else
+                speed = 2.0;
+        }
+
+        //get hitbox for collision checks
+        public Rect GetPlayerHitbox()
+        {
+            return new Rect(Canvas.GetLeft(PlayerRectangle), Canvas.GetTop(PlayerRectangle), PlayerRectangle.Width, PlayerRectangle.Height);
+        }
+
+
+        //EventHandlers sets movement directions if WASD/Arrow Key are pressed/released and calls Shoot method if Space is released
+        #region KeyEventHandlers
         public void OnKeyDown(object? sender, KeyEventArgs e)
         {
             switch (e.Key)
@@ -165,5 +187,6 @@ namespace SpaceShooterCSharp
                     break;
             }
         }
+        #endregion
     }
 }

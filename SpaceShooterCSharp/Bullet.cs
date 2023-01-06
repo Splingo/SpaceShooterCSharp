@@ -13,17 +13,17 @@ namespace SpaceShooterCSharp
     internal class Bullet
     {
         private int bulletSpeed;
-
         private Rectangle bullet;
-
         private string? tag;
 
+        //only one class is used for both enemy and Player bullets, as there are only 2 directions (left/right) a bullet can move
         public Bullet(int direction, Rectangle origin)
         {
             bulletSpeed = direction * 5;
             bullet = spawnBullet(origin);
         }
 
+        //Method checks if origin is Player or Enemy and sets tag accordingly and spawns it on the Canvas
         private Rectangle spawnBullet(Rectangle origin)
         {
             bullet = new Rectangle
@@ -54,6 +54,7 @@ namespace SpaceShooterCSharp
             return bullet;
         }
 
+        //Update is called each tick in GameEngine and moves bullet if its not at a border
         internal void Update()
         {
             if (CheckBorderCollision())
@@ -76,10 +77,10 @@ namespace SpaceShooterCSharp
             return tag;
         }
 
+        //get hitbox for collision checks
         public Rect GetBulletHitbox()
         {
             return new Rect(Canvas.GetLeft(bullet), Canvas.GetTop(bullet), bullet.ActualWidth, bullet.Height);
-
         }
 
         public void deleteBullet()

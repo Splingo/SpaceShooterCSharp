@@ -28,6 +28,8 @@ namespace SpaceShooterCSharp
 
         }
 
+
+        //KeyDown and KeyUp Events handed over to GameEngine
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
             game.OnKeyDown(sender, e);

@@ -11,53 +11,52 @@ namespace SpaceShooterCSharp
 {
     internal class ScoreHealthDisplay
     {
-
-
         private TextBlock scoreTextBlock = new();
         private TextBlock healthTextBlock = new();
 
-        public void GenerateDisplays()
+        public ScoreHealthDisplay()
         {
-            AddScoreDisplay();
-            AddHealthDisplay();
-            Panel.SetZIndex(scoreTextBlock, 1);
-            Panel.SetZIndex(healthTextBlock, 1);
-
+            AddDisplaysToCanvas();
         }
 
-        private void AddScoreDisplay()
+        //sets layout for scoredisplay and adds it (without content) to canvas
+        private void CreateScoreDisplay()
         {
             scoreTextBlock.FontSize = 20;
             scoreTextBlock.Background = Brushes.DarkGray;
             scoreTextBlock.Foreground = Brushes.DarkGreen;
             scoreTextBlock.FontFamily = new FontFamily("Symtext");
             scoreTextBlock.FontWeight = FontWeights.Bold;
-            Canvas.SetLeft(scoreTextBlock, Constants.WindowWidth - scoreTextBlock.ActualWidth - 10);
-            Canvas.SetTop(scoreTextBlock, Constants.WindowHeight - scoreTextBlock.ActualHeight - 10);
-
             MainWindow.game.GameCanvas?.Children.Add(scoreTextBlock);
         }
-
-        private void AddHealthDisplay()
+        //sets layout for healthdisplay and adds it (without content) to canvas
+        private void CreateHealthDisplay()
         {
             healthTextBlock.FontSize = 20;
             healthTextBlock.Background = Brushes.DarkGray;
             healthTextBlock.Foreground = Brushes.DarkGreen;
             healthTextBlock.FontFamily = new FontFamily("Symtext");
             healthTextBlock.FontWeight = FontWeights.Bold;
-            Canvas.SetLeft(healthTextBlock, 10);
-            Canvas.SetTop(healthTextBlock, 10);
-
             MainWindow.game.GameCanvas?.Children.Add(healthTextBlock);
         }
 
+        //sets or resets the displays
+        public void AddDisplaysToCanvas()
+        {
+            CreateScoreDisplay();
+            CreateHealthDisplay();
+            Panel.SetZIndex(scoreTextBlock, 1);
+            Panel.SetZIndex(healthTextBlock, 1);
+        }
 
+        //method called each tick from GameEngine
         public void UpdateDisplays()
         {
             UpdateScoreDisplay();
-
             UpdateHealthDisplay();
         }
+
+        //updates content of score display
         private void UpdateScoreDisplay()
         {
             scoreTextBlock.Text = " YOUR SCORE: " + MainWindow.game.ScoreAsInt.ToString() + " ";
@@ -65,6 +64,7 @@ namespace SpaceShooterCSharp
             Canvas.SetTop(scoreTextBlock, Constants.WindowHeight - scoreTextBlock.ActualHeight - 10);
         }
 
+        //updates content of health display
         private void UpdateHealthDisplay()
         {
             string healthText = " HP: ";
@@ -76,6 +76,5 @@ namespace SpaceShooterCSharp
             Canvas.SetLeft(healthTextBlock, 10);
             Canvas.SetTop(healthTextBlock, 10);
         }
-
     }
 }
