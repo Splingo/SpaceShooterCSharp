@@ -214,6 +214,7 @@ namespace SpaceShooterCSharp
                 soundEngine?.PlaySound(SoundEngine.ESounds.PlayerDamaged);
                 if (Player.Health == 0)
                 {
+                    gameStarted = false;
                     gameTimer?.Stop();
                     new Window_GameLostMenu().Show();
                 }
