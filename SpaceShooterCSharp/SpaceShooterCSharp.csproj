@@ -8,6 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="images\enemy.png" />
+    <None Remove="images\player.png" />
     <None Remove="sounds\backgroundmusic.wav" />
     <None Remove="sounds\enemykilled.wav" />
     <None Remove="sounds\enemyshot.wav" />
@@ -35,6 +37,11 @@
     <EmbeddedResource Include="sounds\startgame.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="images\enemy.png" />
+    <Resource Include="images\player.png" />
   </ItemGroup>
 
 </Project>

@@ -32,6 +32,7 @@ namespace SpaceShooterCSharp
         private List<Bullet> bulletList = new List<Bullet>();
         private List<Bullet> bulletsToRemove = new List<Bullet>();
 
+        private int enemySpawnRandomizer;
 
         private DispatcherTimer? gameTimer;
 
@@ -78,6 +79,7 @@ namespace SpaceShooterCSharp
             gameTimer?.Start();
             soundEngine?.PlaySound(SoundEngine.ESounds.BackgroundMusic);
             ScoreAsInt = 0;
+            SetResetEnemySpawnRandomizer();
         }
 
         //method clears background, resets and re-adds various objects creates to restart the game
@@ -119,11 +121,36 @@ namespace SpaceShooterCSharp
 
         //simple method to spawn more enemies
         //enemy count is current score / 10, min 1.
-        //enemy speed is determined by same calculation -> more points = more and faster enemies (only X speed is changed)
+        //enemy speed is determined by similar calculation 
+        //more points = faster enemies, but caps at 3x initial speed (only X speed is changed)
         private void EnemySpawner()
         {
             if (enemyList.Count <= ScoreAsInt / 10)
-                enemyList.Add(new Enemy(Math.Min(ScoreAsInt / 10 * -1, -1)));
+                enemySpawnRandomizer++;
+            if (enemySpawnRandomizer % 50 == 0)
+            {
+                int enemySpeed = 0;
+                switch (ScoreAsInt / 20)
+                {
+                    case 0:
+                        enemySpeed = -1;
+                        break;
+                    case 1:
+                        enemySpeed = -2;
+                        break;
+                    default:
+                        enemySpeed = -3;
+                        break;
+                }
+                enemyList.Add(new Enemy(enemySpeed));
+                SetResetEnemySpawnRandomizer();
+            }
+        }
+
+
+        private void SetResetEnemySpawnRandomizer()
+        {
+            enemySpawnRandomizer = new Random().Next(5, 25);
         }
 
         //helpermethod that calls the Update method for each bullet for movement

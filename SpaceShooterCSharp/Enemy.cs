@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows;
 using System.Windows.Shapes;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace SpaceShooterCSharp
 {
@@ -22,7 +23,7 @@ namespace SpaceShooterCSharp
         public Enemy(int direction)
         {
             shooterTimer = 0;
-            enemyXSpeed = direction * 1.5;
+            enemyXSpeed = direction;
             enemyYSpeed = direction * new Random().Next(-1, 2);
             enemy = spawnEnemy();
         }
@@ -35,7 +36,7 @@ namespace SpaceShooterCSharp
                 Tag = enemy,
                 Height = 20,
                 Width = 30,
-                Fill = Brushes.Lime
+                Fill = new ImageBrush(new BitmapImage(new Uri($"pack://application:,,,/images/enemy.png")))
             };
 
             Canvas.SetLeft(enemy, Constants.WindowWidth - enemy.Width);
@@ -48,7 +49,7 @@ namespace SpaceShooterCSharp
 
         //method is called each tick in GameEngine, checks if enemy shoots, checks if Enemy is at any border and moves it otherwise
         //bool is returned to let GameEngine know if Enemy is at left border to delete
-        //shooting occurs every 100 Ticks after spawn, but as enemies are (mostly) spawned at random times
+        //shooting happens every 100 Ticks after spawn, but as enemies are (mostly) spawned at random times
         //enemy shooting pattern is mostly random
         public bool Update()
         {

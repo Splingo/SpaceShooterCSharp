@@ -12,6 +12,7 @@ using System.Windows.Threading;
 using System.Threading;
 using System.Windows;
 using System.Windows.Shapes;
+using System.Windows.Media.Imaging;
 
 namespace SpaceShooterCSharp
 {
@@ -33,9 +34,9 @@ namespace SpaceShooterCSharp
             Rectangle player = new Rectangle
             {
                 Tag = "player",
-                Height = 30,
-                Width = 30,
-                Fill = Brushes.Aqua
+                Height = 28,
+                Width = 32,
+                Fill = new ImageBrush(new BitmapImage(new Uri($"pack://application:,,,/images/player.png")))
             };
 
             ResetPlayer();
@@ -131,9 +132,10 @@ namespace SpaceShooterCSharp
         }
 
         //get hitbox for collision checks
+        //hitbox gets small adjustment to match spaceship proportions
         public Rect GetPlayerHitbox()
         {
-            return new Rect(Canvas.GetLeft(PlayerRectangle), Canvas.GetTop(PlayerRectangle), PlayerRectangle.Width, PlayerRectangle.Height);
+            return new Rect(Canvas.GetLeft(PlayerRectangle) + 5, Canvas.GetTop(PlayerRectangle) + 6, PlayerRectangle.Width - 10, PlayerRectangle.Height - 12);
         }
 
 
