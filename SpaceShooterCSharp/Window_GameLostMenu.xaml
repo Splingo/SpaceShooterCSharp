@@ -41,11 +41,11 @@
                 </TextBlock>
             </Grid>
 
-            <Button Grid.Row="1" Background="Black"
+            <Button Grid.Row="1" Background="Black" BorderThickness="0"
             Click="Button_Restart"
             Content="RESTART GAME"   Foreground="DarkGray" />
 
-            <Button Grid.Row="2" Background="Black"
+            <Button Grid.Row="2" Background="Black" BorderThickness="0"
             Click="Button_ExitGame"
             Content="EXIT GAME"  Foreground="DarkGray"  FontWeight="Bold"/>
 

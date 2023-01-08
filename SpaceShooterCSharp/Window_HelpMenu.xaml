@@ -42,7 +42,7 @@
             <Grid Grid.Row="1">
                                
                 <Button 
-                Click="Button_StartGame"
+                Click="Button_StartGame" BorderThickness="0"
                 Content="START GAME" Background="DarkGreen" FontWeight="Bold"/>
                 
                 
