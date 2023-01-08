@@ -5,6 +5,7 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>player.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,6 +17,10 @@
     <None Remove="sounds\playerdamaged.wav" />
     <None Remove="sounds\playershot.wav" />
     <None Remove="sounds\startgame.wav" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="player.ico" />
   </ItemGroup>
 
   <ItemGroup>

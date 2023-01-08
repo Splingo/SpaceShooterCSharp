@@ -27,6 +27,7 @@ namespace SpaceShooterCSharp
             Show();
             LocationChanged += new EventHandler(Window_LocationChanged);
             game.InitializeGame(gameCanvas);
+           
 
         }
 

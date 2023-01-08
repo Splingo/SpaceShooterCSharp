@@ -5,11 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SpaceShooterCSharp"
         mc:Ignorable="d"
-        
-        Title="SpaceShooter" SizeToContent="WidthAndHeight" KeyDown="OnKeyDown" KeyUp="OnKeyUp" ResizeMode="NoResize"
-        WindowStartupLocation="CenterScreen">
-    <Canvas Name="gameCanvas" Focusable="true" Width="1000" Height="500" Background="Black">
-
-    </Canvas>
+        Title="SpaceShooter"
+        SizeToContent="WidthAndHeight"
+        KeyDown="OnKeyDown"
+        KeyUp="OnKeyUp"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        >
+    
+    <Canvas Name="gameCanvas" Focusable="true" Width="1000" Height="500" Background="Black"/>
 
 </Window>
+    
