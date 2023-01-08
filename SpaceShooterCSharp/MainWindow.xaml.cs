@@ -24,6 +24,7 @@ namespace SpaceShooterCSharp
         public MainWindow()
         {
             InitializeComponent();
+            Show();
             game.InitializeGame(gameCanvas);
 
         }

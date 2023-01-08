@@ -13,6 +13,7 @@
         Loaded="Window_Loaded"
         Closed="Window_Closed"
         FontFamily="Symtext"
+        ShowInTaskbar="False"
         >
     <Border BorderBrush="Green"
             BorderThickness="5"

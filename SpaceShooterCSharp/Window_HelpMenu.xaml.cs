@@ -24,7 +24,6 @@ namespace SpaceShooterCSharp
         public Window_HelpMenu()
         {
             InitializeComponent();
-            Topmost = true;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

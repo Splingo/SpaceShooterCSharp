@@ -23,8 +23,6 @@ namespace SpaceShooterCSharp
         public Window_GameLostMenu()
         {
             InitializeComponent();
-            textBlock2.Inlines.Add($"YOUR SCORE: {MainWindow.game.ScoreAsInt}");
-            Topmost = true;
         }
 
         private void Button_ExitGame(object sender, RoutedEventArgs e)
@@ -39,7 +37,7 @@ namespace SpaceShooterCSharp
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-
+            textBlock2.Inlines.Add($"YOUR SCORE: {MainWindow.game.ScoreAsInt}");
         }
 
         private void Window_Closed(object sender, EventArgs e)

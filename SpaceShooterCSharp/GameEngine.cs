@@ -41,6 +41,8 @@ namespace SpaceShooterCSharp
         private SoundEngine? soundEngine;
 
         private ScoreHealthDisplay? scoreHealthDisplay;
+
+        private MenuHelper menu;
         #endregion
 
         #region SetResetGame
@@ -53,12 +55,14 @@ namespace SpaceShooterCSharp
             background = new();
             soundEngine = new();
             scoreHealthDisplay = new();
+            menu = new();
 
 
             gameTimer.Interval = TimeSpan.FromMilliseconds(5);
             gameTimer.Tick += new EventHandler(GameTimerEvent);
 
-            new Window_HelpMenu().Show();
+            menu.ShowHelpMenu();
+
         }
 
 
@@ -216,7 +220,7 @@ namespace SpaceShooterCSharp
                 {
                     gameStarted = false;
                     gameTimer?.Stop();
-                    new Window_GameLostMenu().Show();
+                    menu.ShowGameLostMenu();
                 }
                 else
                 {
