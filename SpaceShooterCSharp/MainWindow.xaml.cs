@@ -25,8 +25,18 @@ namespace SpaceShooterCSharp
         {
             InitializeComponent();
             Show();
+            LocationChanged += new EventHandler(Window_LocationChanged);
             game.InitializeGame(gameCanvas);
 
+        }
+
+        private void Window_LocationChanged(object? sender, EventArgs e)
+        {
+            foreach (Window window in OwnedWindows)
+            {
+                window.Top = Top + ((ActualHeight - window.ActualHeight) / 2);
+                window.Left = Left + ((ActualWidth - window.ActualWidth) / 2);
+            }
         }
 
 

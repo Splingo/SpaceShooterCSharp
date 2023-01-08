@@ -5,7 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         Title="GameLostMenu" Height="250" Width="300"
         ResizeMode="NoResize"
-        WindowStartupLocation="CenterScreen"
         WindowStyle="None"
         FontSize="25"
         
