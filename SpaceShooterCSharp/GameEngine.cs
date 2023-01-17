@@ -42,7 +42,7 @@ namespace SpaceShooterCSharp
 
         private ScoreHealthDisplay? scoreHealthDisplay;
 
-        private MenuHelper menu;
+        private MenuHelper? menu;
         #endregion
 
         #region SetResetGame
@@ -220,7 +220,7 @@ namespace SpaceShooterCSharp
                 {
                     gameStarted = false;
                     gameTimer?.Stop();
-                    menu.ShowGameLostMenu();
+                    menu?.ShowGameLostMenu();
                 }
                 else
                 {
